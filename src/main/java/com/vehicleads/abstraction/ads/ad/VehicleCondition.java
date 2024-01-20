@@ -1,4 +1,4 @@
-package com.vehicleads.abstraction.ads.vehiclead;
+package com.vehicleads.abstraction.ads.ad;
 
 public enum VehicleCondition {
     FOR_PARTS,

@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 
 @MappedSuperclass
 public abstract class Vehicle extends BaseEntity<Integer> {
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "brand_id")
     private Brand brand;
 
@@ -18,6 +18,16 @@ public abstract class Vehicle extends BaseEntity<Integer> {
 
     public Brand getBrand() {
         return brand;
+    }
+
+    public void setBrand(Brand brand) {
+        this.brand = brand;
+    }
+
+    public String getModelName() { return modelName; }
+
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
     }
 
     public String getFullName() {

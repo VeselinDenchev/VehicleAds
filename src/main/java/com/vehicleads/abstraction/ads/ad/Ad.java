@@ -1,7 +1,8 @@
-package com.vehicleads.abstraction.ads.vehiclead;
+package com.vehicleads.abstraction.ads.ad;
 
 import com.vehicleads.abstraction.base.entity.BaseEntity;
 import jakarta.persistence.*;
+import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -9,31 +10,36 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 @MappedSuperclass
-public abstract class VehicleAd extends BaseEntity<Integer> {
-    @Column(name = "vehicle_condition")
+public class Ad extends BaseEntity<Integer> {
+    @Column(name = "title", nullable = false)
+    @NotEmpty
+    @Size(min = 2, max = 50)
+    private String title;
+
+    @Column(name = "vehicle_condition", nullable = false)
     @NotEmpty
     private VehicleCondition vehicleCondition;
 
-    @Column(name = "is_price_negotiable")
+    @Column(name = "is_price_negotiable", nullable = false)
     @NotEmpty
     private boolean isPriceNegotiable;
 
     @Column(name = "price", nullable = true)
     @Min(0)
-    private double price;
+    private Double price;
 
-    @Column(name = "mileage")
+    @Column(name = "mileage", nullable = false)
     @NotEmpty
     @Min(0)
     private int mileage;
 
-    @Column(name = "manufacture_year")
+    @Column(name = "manufacture_year", nullable = false)
     @NotEmpty
     @Min(1900)
     @Max(2023)
     private short manufactureYear;
 
-    @Column(name = "populated_place")
+    @Column(name = "populated_place", nullable = false)
     @NotEmpty
     @Size(min = 2, max = 50)
     private String populatedPlace;
@@ -50,6 +56,14 @@ public abstract class VehicleAd extends BaseEntity<Integer> {
     @Size(max = 200)
     private String description;
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public VehicleCondition getVehicleCondition() {
         return vehicleCondition;
     }
@@ -58,19 +72,20 @@ public abstract class VehicleAd extends BaseEntity<Integer> {
         this.vehicleCondition = condition;
     }
 
-    public boolean isPriceNegotiable() {
+    public boolean getIsPriceNegotiable() {
         return isPriceNegotiable;
     }
 
-    public void setPriceNegotiable(boolean isPriceNegotiable) {
+    public void setIsPriceNegotiable(boolean isPriceNegotiable) {
         this.isPriceNegotiable = isPriceNegotiable;
     }
 
-    public double getPrice() {
+    @Nullable
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(@Nullable Double price) {
         this.price = price;
     }
 

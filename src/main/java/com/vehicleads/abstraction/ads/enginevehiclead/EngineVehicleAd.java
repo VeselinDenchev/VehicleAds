@@ -1,6 +1,6 @@
 package com.vehicleads.abstraction.ads.enginevehiclead;
 
-import com.vehicleads.abstraction.ads.vehiclead.VehicleAd;
+import com.vehicleads.abstraction.ads.ad.Ad;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 
@@ -9,15 +9,15 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 
 @MappedSuperclass
-public abstract class EngineVehicleAd extends VehicleAd {
-    @Column(name = "engine_type")
+public abstract class EngineVehicleAd extends Ad {
+    @Column(name = "engine_type", nullable = false)
     @NotEmpty
     private EngineType engineType;
 
-    @Column(name = "horse_power")
+    @Column(name = "horse_power", nullable = false)
     @Min(1)
     @Max(3_000)
-    private int engineHorsePower;
+    private int horsePower;
 
     public EngineType getEngineType() {
         return engineType;
@@ -27,11 +27,11 @@ public abstract class EngineVehicleAd extends VehicleAd {
         this.engineType = engineType;
     }
 
-    public int getEngineHorsePower() {
-        return engineHorsePower;
+    public int getHorsePower() {
+        return horsePower;
     }
 
-    public void setEngineHorsePower(int engineHorsePower) {
-        this.engineHorsePower = engineHorsePower;
+    public void setHorsePower(int horsePower) {
+        this.horsePower = horsePower;
     }
 }

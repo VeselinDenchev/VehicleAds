@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
 @Table(name = "car_ads")
 public class CarAd extends EngineWithGearboxVehicleAd {
     @ManyToOne
-    @JoinColumn(name = "car_id")
+    @JoinColumn(name = "car_id", nullable = false)
     private Car car;
 
     public Car getCar() {

@@ -1,5 +1,6 @@
 package com.vehicleads.implementation.entities.ads.boat;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.vehicleads.abstraction.ads.enginevehiclead.EngineVehicleAd;
 import com.vehicleads.abstraction.ads.interfaces.VehicleLength;
 import com.vehicleads.abstraction.vehicle.Vehicle;
@@ -13,11 +14,12 @@ import javax.validation.constraints.NotEmpty;
 @Entity
 @Table(name = "boat_ads")
 public class BoatAd extends EngineVehicleAd implements VehicleLength {
-    @ManyToOne
-    @JoinColumn(name = "boat_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "boat_id", nullable = false)
+    @JsonBackReference
     private Boat boat;
 
-    @Column(name = "length_in_meters")
+    @Column(name = "length_in_meters", nullable = false)
     @NotEmpty
     @Min(1)
     @Max(100)
@@ -34,5 +36,10 @@ public class BoatAd extends EngineVehicleAd implements VehicleLength {
     @Override
     public byte getLengthInMeters() {
         return lengthInMeters;
+    }
+
+    @Override
+    public void setLengthInMeters(byte lengthInMeters) {
+        this.lengthInMeters = lengthInMeters;
     }
 }

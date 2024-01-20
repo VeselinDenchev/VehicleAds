@@ -10,19 +10,19 @@ import javax.validation.constraints.NotEmpty;
 
 @MappedSuperclass
 public abstract class CommercialVehicleAd extends EngineWithGearboxVehicleAd {
-    @Column(name = "axes_count")
+    @Column(name = "axes_count", nullable = false)
     @NotEmpty
     @Min(1)
     @Max(8)
     private byte axesCount;
 
-    @Column(name = "seats_count")
+    @Column(name = "seats_count", nullable = false)
     @NotEmpty
     @Min(1)
     @Max(50)
     private byte seatsCount;
 
-    @Column(name = "load_capacity_kg")
+    @Column(name = "load_capacity_kg", nullable = false)
     @Min(100)
     @Max(100_000)
     private int loadCapacityKg;

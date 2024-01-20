@@ -12,10 +12,10 @@ import javax.validation.constraints.NotEmpty;
 @Table(name = "motorcycle_ads")
 public class MotorcycleAd extends EngineWithGearboxVehicleAd {
     @ManyToOne
-    @JoinColumn(name = "motorcycle_id")
+    @JoinColumn(name = "motorcycle_id", nullable = false)
     private Motorcycle motorcycle;
 
-    @Column(name = "engine_capacity")
+    @Column(name = "engine_capacity", nullable = false)
     @NotEmpty
     @Min(30)
     @Max(5_000)

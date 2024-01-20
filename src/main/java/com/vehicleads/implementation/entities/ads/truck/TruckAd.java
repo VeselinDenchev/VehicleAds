@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 @Table(name = "truck_ads")
 public class TruckAd extends CommercialVehicleAd {
     @ManyToOne
-    @JoinColumn(name = "truck_id")
+    @JoinColumn(name = "truck_id", nullable = false)
     private Truck truck;
 
     public Truck getTruck() {

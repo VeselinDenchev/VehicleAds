@@ -9,12 +9,12 @@ import javax.validation.constraints.NotEmpty;
 
 @MappedSuperclass
 public abstract class EngineWithGearboxVehicleAd extends EngineVehicleAd {
-    @Column(name = "mileage")
+    @Column(name = "mileage", nullable = false)
     @NotEmpty
     @Min(0)
     private int mileage;
 
-    @Column(name = "gearbox")
+    @Column(name = "gearbox", nullable = false)
     @NotEmpty
     private Gearbox gearbox;
 

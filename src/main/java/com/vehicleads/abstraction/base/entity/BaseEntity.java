@@ -14,4 +14,9 @@ public abstract class BaseEntity<T extends Serializable> implements Identity<T>,
     @Override public T getId() {
         return id;
     }
+
+    @Override
+    public void setId(T id) {
+        this.id = id;
+    }
 }

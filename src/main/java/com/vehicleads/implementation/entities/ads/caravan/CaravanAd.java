@@ -1,8 +1,7 @@
 package com.vehicleads.implementation.entities.ads.caravan;
 
-import com.vehicleads.abstraction.ads.vehiclead.VehicleAd;
+import com.vehicleads.abstraction.ads.ad.Ad;
 import com.vehicleads.abstraction.ads.interfaces.VehicleLength;
-import com.vehicleads.implementation.entities.vehicles.Car;
 import com.vehicleads.implementation.entities.vehicles.Caravan;
 import jakarta.persistence.*;
 
@@ -10,12 +9,12 @@ import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "caravan_ads")
-public class CaravanAd extends VehicleAd implements VehicleLength {
+public class CaravanAd extends Ad implements VehicleLength {
     @ManyToOne
-    @JoinColumn(name = "caravan_id")
+    @JoinColumn(name = "caravan_id", nullable = false)
     private Caravan caravan;
 
-    @Column(name = "length_in_meters")
+    @Column(name = "length_in_meters", nullable = false)
     @NotEmpty
     private byte lengthInMeters;
 
@@ -30,5 +29,10 @@ public class CaravanAd extends VehicleAd implements VehicleLength {
     @Override
     public byte getLengthInMeters() {
         return lengthInMeters;
+    }
+
+    @Override
+    public void setLengthInMeters(byte lengthInMeters) {
+        this.lengthInMeters = lengthInMeters;
     }
 }
