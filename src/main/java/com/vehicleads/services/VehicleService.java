@@ -2,7 +2,6 @@ package com.vehicleads.services;
 
 import com.vehicleads.abstraction.ads.ad.Ad;
 import com.vehicleads.abstraction.base.repositories.VehicleRepository;
-import com.vehicleads.abstraction.brand.repository.BrandRepository;
 import com.vehicleads.abstraction.vehicle.Vehicle;
 import com.vehicleads.abstraction.vehicle.repositories.*;
 import com.vehicleads.exceptions.brand.BrandNotFoundException;
@@ -21,9 +20,6 @@ import java.util.Optional;
 
 @Service
 public class VehicleService {
-    @Autowired
-    private BrandRepository brandRepository;
-
     @Autowired
     private BoatRepository boatRepository;
 
