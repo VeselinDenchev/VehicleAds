@@ -1,6 +1,8 @@
 package com.vehicleads.abstraction.ads.ad;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.vehicleads.abstraction.base.entity.BaseEntity;
+import com.vehicleads.implementation.entities.user.UserEntity;
 import jakarta.persistence.*;
 import org.springframework.lang.Nullable;
 
@@ -11,6 +13,11 @@ import javax.validation.constraints.Size;
 
 @MappedSuperclass
 public class Ad extends BaseEntity<Integer> {
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
+    private UserEntity user;
+
     @Column(name = "title", nullable = false)
     @NotEmpty
     @Size(min = 2, max = 50)
@@ -38,11 +45,6 @@ public class Ad extends BaseEntity<Integer> {
     @Min(1900)
     @Max(2023)
     private short manufactureYear;
-
-    @Column(name = "populated_place", nullable = false)
-    @NotEmpty
-    @Size(min = 2, max = 50)
-    private String populatedPlace;
 
     @Column(name = "color")
     @Size(min = 2, max = 20)
@@ -105,14 +107,6 @@ public class Ad extends BaseEntity<Integer> {
         this.manufactureYear = manufactureYear;
     }
 
-    public String getPopulatedPlace() {
-        return populatedPlace;
-    }
-
-    public void setPopulatedPlace(String populatedPlace) {
-        this.populatedPlace = populatedPlace;
-    }
-
     public String getColor() {
         return color;
     }
@@ -135,5 +129,13 @@ public class Ad extends BaseEntity<Integer> {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 }

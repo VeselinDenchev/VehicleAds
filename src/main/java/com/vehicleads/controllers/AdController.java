@@ -2,10 +2,11 @@ package com.vehicleads.controllers;
 
 import com.vehicleads.abstraction.ads.ad.Ad;
 import com.vehicleads.abstraction.vehicle.Vehicle;
-import com.vehicleads.dtos.AdSearchDto;
+import com.vehicleads.dtos.ad.AdSearchDto;
 import com.vehicleads.exceptions.ad.InvalidVehicleAdTypeException;
 import com.vehicleads.exceptions.ad.AdNotFoundException;
 import com.vehicleads.exceptions.brand.BrandNotFoundException;
+import com.vehicleads.exceptions.user.UnauthorizedException;
 import com.vehicleads.exceptions.vehicle.InvalidVehicleTypeException;
 import com.vehicleads.implementation.entities.ads.boat.BoatAd;
 import com.vehicleads.implementation.entities.ads.bus.BusAd;
@@ -14,9 +15,9 @@ import com.vehicleads.implementation.entities.ads.caravan.CaravanAd;
 import com.vehicleads.implementation.entities.ads.motorcycle.MotorcycleAd;
 import com.vehicleads.implementation.entities.ads.truck.TruckAd;
 import com.vehicleads.implementation.entities.brand.Brand;
-import com.vehicleads.services.AdService;
-import com.vehicleads.services.BrandService;
-import com.vehicleads.services.VehicleService;
+import com.vehicleads.implementation.services.ad.AdService;
+import com.vehicleads.implementation.services.brand.BrandService;
+import com.vehicleads.implementation.services.vehicle.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -121,6 +122,8 @@ public class AdController {
             return "redirect:/ads/boat";
         } catch (InvalidVehicleAdTypeException e) {
             throw new RuntimeException(e);
+        } catch (UnauthorizedException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -131,6 +134,8 @@ public class AdController {
 
             return "boat/ads-list";
         } catch (InvalidVehicleAdTypeException e) {
+            throw new RuntimeException(e);
+        } catch (UnauthorizedException e) {
             throw new RuntimeException(e);
         }
     }
@@ -143,6 +148,8 @@ public class AdController {
             return "boat/ads-list";
         } catch (InvalidVehicleAdTypeException e) {
             throw new RuntimeException(e);
+        } catch (UnauthorizedException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -153,6 +160,8 @@ public class AdController {
 
             return "boat/ads-list";
         } catch (InvalidVehicleAdTypeException e) {
+            throw new RuntimeException(e);
+        } catch (UnauthorizedException e) {
             throw new RuntimeException(e);
         }
     }
@@ -165,6 +174,8 @@ public class AdController {
             return "boat/ads-list";
         } catch (InvalidVehicleAdTypeException e) {
             throw new RuntimeException(e);
+        } catch (UnauthorizedException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -175,6 +186,8 @@ public class AdController {
 
             return "boat/ads-list";
         } catch (InvalidVehicleAdTypeException e) {
+            throw new RuntimeException(e);
+        } catch (UnauthorizedException e) {
             throw new RuntimeException(e);
         }
     }

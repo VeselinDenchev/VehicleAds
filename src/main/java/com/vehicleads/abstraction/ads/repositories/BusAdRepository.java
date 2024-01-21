@@ -7,14 +7,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Repository
 public interface BusAdRepository extends AdRepository<BusAd> {
     @Transactional(readOnly = true)
     @Query(value = """
-           SELECT * FROM vehicle_ads.boats
-           WHERE :title IS NULL OR title = :title
+           SELECT user_id FROM vehicle_ads.bus_ads
+           WHERE id = :ad_id
            """, nativeQuery = true)
-    List<BusAd> find(@Param("title") String title);
+    int findUserId(@Param("ad_id") int adId);
 }

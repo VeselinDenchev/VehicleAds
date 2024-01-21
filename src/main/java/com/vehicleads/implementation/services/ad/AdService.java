@@ -1,11 +1,14 @@
-package com.vehicleads.services;
+package com.vehicleads.implementation.services.ad;
 
 import com.vehicleads.abstraction.ads.repositories.*;
 import com.vehicleads.abstraction.ads.ad.Ad;
 import com.vehicleads.abstraction.base.repositories.AdRepository;
+import com.vehicleads.abstraction.user.repository.UserRepository;
 import com.vehicleads.abstraction.vehicle.repositories.BoatRepository;
-import com.vehicleads.dtos.AdSearchDto;
+import com.vehicleads.dtos.ad.AdSearchDto;
 import com.vehicleads.exceptions.ad.AdNotFoundException;
+import com.vehicleads.exceptions.user.UnauthorizedException;
+import com.vehicleads.exceptions.user.UserNotFoundException;
 import com.vehicleads.implementation.entities.ads.boat.BoatAd;
 import com.vehicleads.implementation.entities.ads.bus.BusAd;
 import com.vehicleads.implementation.entities.ads.car.CarAd;
@@ -14,7 +17,9 @@ import com.vehicleads.implementation.entities.ads.motorcycle.MotorcycleAd;
 import com.vehicleads.implementation.entities.ads.truck.TruckAd;
 import com.vehicleads.exceptions.ad.InvalidVehicleAdTypeException;
 import com.vehicleads.exceptions.vehicle.InvalidVehicleTypeException;
+import com.vehicleads.implementation.entities.user.UserEntity;
 import com.vehicleads.implementation.entities.vehicles.Boat;
+import com.vehicleads.utils.authentication.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -46,6 +51,9 @@ public class AdService {
     @Autowired
     private TruckAdRepository truckAdRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public List<? extends Ad> find(String vehicleType, AdSearchDto adSearch)
         throws InvalidVehicleTypeException {
         var repository = getRepositoryByVehicleType(vehicleType).orElseThrow(InvalidVehicleTypeException::new);
@@ -64,13 +72,17 @@ public class AdService {
         return ad;
     }
 
-    public void save(Ad vehicleAd) throws InvalidVehicleAdTypeException {
-        if (vehicleAd.getIsPriceNegotiable()) {
-            vehicleAd.setPrice(null);
+    public void save(Ad ad) throws UserNotFoundException, UnauthorizedException, InvalidVehicleAdTypeException {
+        String username = SessionUtil.getSessionUser();
+        UserEntity user = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
+        ad.setUser(user);
+
+        if (ad.getIsPriceNegotiable()) {
+            ad.setPrice(null);
         }
 
-        switch (vehicleAd) {
-            case BoatAd boatAd -> saveBoatAd(boatAd);
+        switch (ad) {
+            case BoatAd boatAd -> saveBoatAd(boatAd, user.getId());
             case BusAd busAd -> busAdRepository.save(busAd);
             case CarAd carAd -> carAdRepository.save(carAd);
             case CaravanAd caravanAd -> caravanAdRepository.save(caravanAd);
@@ -103,7 +115,13 @@ public class AdService {
         };
     }
 
-    private void saveBoatAd(BoatAd boatAd) {
+    private void saveBoatAd(BoatAd boatAd, int currentUserId) throws UnauthorizedException {
+        // If ad is edited we must check if initially this ad was created by the same user
+        if (boatAd.getId() != null) {
+            int userIdOfLastUpdate = boatAdRepository.findUserId(boatAd.getId());
+            if (userIdOfLastUpdate != currentUserId) throw new UnauthorizedException();
+        }
+
         Boat boatFromDatabase = mapBoatBrandAndModel(boatAd.getBoat());
         boatAd.setBoat(boatFromDatabase);
         boatAdRepository.save(boatAd);
