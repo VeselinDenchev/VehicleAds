@@ -1,4 +1,4 @@
-package com.vehicleads.dtos;
+package com.vehicleads.dtos.ad;
 
 import org.springframework.lang.Nullable;
 

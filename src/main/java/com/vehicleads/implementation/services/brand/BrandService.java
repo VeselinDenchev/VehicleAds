@@ -1,4 +1,4 @@
-package com.vehicleads.services;
+package com.vehicleads.implementation.services.brand;
 
 import com.vehicleads.abstraction.brand.repository.BrandRepository;
 import com.vehicleads.exceptions.vehicle.InvalidVehicleTypeException;

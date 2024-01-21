@@ -1,4 +1,4 @@
-package com.vehicleads.services;
+package com.vehicleads.implementation.services.vehicle;
 
 import com.vehicleads.abstraction.ads.ad.Ad;
 import com.vehicleads.abstraction.base.repositories.VehicleRepository;
