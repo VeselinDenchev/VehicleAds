@@ -1,7 +1,6 @@
 package com.vehicleads.implementation.entities.ads.car;
 
 import com.vehicleads.abstraction.ads.enginevehiclewithgearboxad.EngineWithGearboxVehicleAd;
-import com.vehicleads.implementation.entities.vehicles.Bus;
 import com.vehicleads.implementation.entities.vehicles.Car;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;

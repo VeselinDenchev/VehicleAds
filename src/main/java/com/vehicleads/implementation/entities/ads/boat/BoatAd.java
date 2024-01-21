@@ -3,7 +3,6 @@ package com.vehicleads.implementation.entities.ads.boat;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.vehicleads.abstraction.ads.enginevehiclead.EngineVehicleAd;
 import com.vehicleads.abstraction.ads.interfaces.VehicleLength;
-import com.vehicleads.abstraction.vehicle.Vehicle;
 import com.vehicleads.implementation.entities.vehicles.Boat;
 import jakarta.persistence.*;
 
