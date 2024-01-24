@@ -1,7 +1,6 @@
 package com.vehicleads.implementation.entities.vehicles;
 
 import com.vehicleads.abstraction.vehicle.Vehicle;
-import com.vehicleads.implementation.entities.ads.motorcycle.MotorcycleAd;
 import com.vehicleads.implementation.entities.ads.truck.TruckAd;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;

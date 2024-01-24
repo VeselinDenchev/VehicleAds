@@ -1,12 +1,10 @@
 package com.vehicleads.implementation.entities.brand;
 
 import com.vehicleads.abstraction.base.entity.BaseEntity;
-import com.vehicleads.abstraction.vehicle.Vehicle;
 import jakarta.persistence.*;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.util.List;
 
 @Entity
 @Table(name = "brands")
