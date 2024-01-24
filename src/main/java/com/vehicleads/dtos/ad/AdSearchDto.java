@@ -2,13 +2,11 @@ package com.vehicleads.dtos.ad;
 
 import org.springframework.lang.Nullable;
 
-import java.util.Optional;
-
 public class AdSearchDto {
     private String title = "";
     private boolean isPriceNegotiable = false; // default value
-    private @Nullable Double minPrice = null;
-    private @Nullable Double maxPrice = null;
+    private @Nullable Integer minPrice = null;
+    private @Nullable Integer maxPrice = null;
 
     public String getTitle() {
         return title;
@@ -26,19 +24,19 @@ public class AdSearchDto {
         this.isPriceNegotiable = isPriceNegotiable;
     }
 
-    public Double getMinPrice() {
+    public Integer getMinPrice() {
         return minPrice;
     }
 
-    public void setMinPrice(@Nullable Double minPrice) {
+    public void setMinPrice(@Nullable Integer minPrice) {
         this.minPrice = minPrice;
     }
 
-    public Double getMaxPrice() {
+    public Integer getMaxPrice() {
         return maxPrice;
     }
 
-    public void setMaxPrice(@Nullable Double maxPrice) {
+    public void setMaxPrice(@Nullable Integer maxPrice) {
         this.maxPrice = maxPrice;
     }
 }
