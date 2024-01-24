@@ -1,6 +1,7 @@
 package com.vehicleads.implementation.entities.vehicles;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.vehicleads.abstraction.vehicle.Vehicle;
 import com.vehicleads.implementation.entities.ads.motorcycle.MotorcycleAd;
 import jakarta.persistence.CascadeType;
@@ -14,6 +15,7 @@ import java.util.List;
 @Table(name = "motorcycles")
 public class Motorcycle extends Vehicle {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "motorcycle")
+    @JsonManagedReference
     private List<MotorcycleAd> ads;
 
     public List<MotorcycleAd> getAds() {

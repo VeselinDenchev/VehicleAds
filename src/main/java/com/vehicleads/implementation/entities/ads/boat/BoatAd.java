@@ -18,6 +18,12 @@ public class BoatAd extends EngineVehicleAd implements VehicleLength {
     @JsonBackReference
     private Boat boat;
 
+    @Column(name = "engines_count", nullable = false)
+    @NotEmpty
+    @Min(1)
+    @Max(4)
+    private int enginesCount;
+
     @Column(name = "length_in_meters", nullable = false)
     @NotEmpty
     @Min(1)
@@ -30,6 +36,14 @@ public class BoatAd extends EngineVehicleAd implements VehicleLength {
 
     public void setBoat(Boat boat) {
         this.boat = boat;
+    }
+
+    public int getEnginesCount() {
+        return enginesCount;
+    }
+
+    public void setEnginesCount(int enginesCount) {
+        this.enginesCount = enginesCount;
     }
 
     @Override

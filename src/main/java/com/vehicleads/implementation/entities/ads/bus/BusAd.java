@@ -1,5 +1,6 @@
 package com.vehicleads.implementation.entities.ads.bus;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.vehicleads.abstraction.ads.commercialvehiclead.CommercialVehicleAd;
 import com.vehicleads.implementation.entities.vehicles.Bus;
 import jakarta.persistence.Entity;
@@ -12,6 +13,7 @@ import jakarta.persistence.Table;
 public class BusAd extends CommercialVehicleAd {
     @ManyToOne
     @JoinColumn(name = "bus_id", nullable = false)
+    @JsonBackReference
     private Bus bus;
 
     public Bus getBus() {

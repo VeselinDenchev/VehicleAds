@@ -1,5 +1,6 @@
 package com.vehicleads.implementation.entities.ads.caravan;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.vehicleads.abstraction.ads.ad.Ad;
 import com.vehicleads.abstraction.ads.interfaces.VehicleLength;
 import com.vehicleads.implementation.entities.vehicles.Caravan;
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotEmpty;
 public class CaravanAd extends Ad implements VehicleLength {
     @ManyToOne
     @JoinColumn(name = "caravan_id", nullable = false)
+    @JsonBackReference
     private Caravan caravan;
 
     @Column(name = "length_in_meters", nullable = false)

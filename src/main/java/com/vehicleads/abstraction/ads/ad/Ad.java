@@ -33,17 +33,12 @@ public class Ad extends BaseEntity<Integer> {
 
     @Column(name = "price", nullable = true)
     @Min(0)
-    private Double price;
-
-    @Column(name = "mileage", nullable = false)
-    @NotEmpty
-    @Min(0)
-    private int mileage;
+    private Integer price;
 
     @Column(name = "manufacture_year", nullable = false)
     @NotEmpty
-    @Min(1900)
-    @Max(2023)
+    @Min(1_900)
+    @Max(2_024)
     private short manufactureYear;
 
     @Column(name = "color")
@@ -51,7 +46,7 @@ public class Ad extends BaseEntity<Integer> {
     private String color;
 
     @Column(name = "imageUrl")
-    @Size(min = 2, max = 50)
+    @Size(min = 2, max = 200)
     private String imageUrl;
 
     @Column(name = "description")
@@ -83,20 +78,12 @@ public class Ad extends BaseEntity<Integer> {
     }
 
     @Nullable
-    public Double getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(@Nullable Double price) {
+    public void setPrice(@Nullable Integer price) {
         this.price = price;
-    }
-
-    public int getMileage() {
-        return mileage;
-    }
-
-    public void setMileage(int mileage) {
-        this.mileage = mileage;
     }
 
     public short getManufactureYear() {

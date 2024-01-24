@@ -1,5 +1,6 @@
 package com.vehicleads.implementation.entities.ads.truck;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.vehicleads.abstraction.ads.commercialvehiclead.CommercialVehicleAd;
 import com.vehicleads.implementation.entities.vehicles.Truck;
 import jakarta.persistence.Entity;
@@ -12,6 +13,7 @@ import jakarta.persistence.Table;
 public class TruckAd extends CommercialVehicleAd {
     @ManyToOne
     @JoinColumn(name = "truck_id", nullable = false)
+    @JsonBackReference
     private Truck truck;
 
     public Truck getTruck() {
