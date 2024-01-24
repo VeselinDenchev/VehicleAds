@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 @MappedSuperclass
 public class Ad extends BaseEntity<Integer> {
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "boat_id", nullable = false)
+    @JoinColumn(name = "vehicle_id", nullable = false)
     @JsonBackReference
     private Vehicle vehicle;
 
