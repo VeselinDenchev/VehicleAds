@@ -49,7 +49,7 @@ public class AdController {
             model.addAttribute("ads", ads);
             model.addAttribute("adSearch", adSearch);
 
-            return String.format("ads/%s-ad/list", vehicleType);
+            return String.format("ads/%s/list", vehicleType);
         }
         catch (InvalidVehicleTypeException ivte) {
             return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.BAD_REQUEST, ivte.getMessage());
@@ -66,7 +66,7 @@ public class AdController {
             model.addAttribute("ads", ads);
             model.addAttribute("adSearch", adSearch);
 
-            return String.format("ads/%s-ad/my-ads", vehicleType);
+            return String.format("ads/%s/my-ads", vehicleType);
         }
         catch (InvalidVehicleTypeException ivte) {
             return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.BAD_REQUEST, ivte.getMessage());
@@ -82,7 +82,7 @@ public class AdController {
             Ad ad = adService.findByVehicleTypeAndId(vehicleType, id);
             model.addAttribute("ad", ad);
 
-            return String.format("ads/%s-ad/details", vehicleType);
+            return String.format("ads/%s/details", vehicleType);
         }
         catch (InvalidVehicleTypeException ivte) {
             return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.BAD_REQUEST, ivte.getMessage());
@@ -245,6 +245,6 @@ public class AdController {
         model.addAttribute("brands", brands);
         model.addAttribute("models", models);
 
-        return String.format("ads/%s-ad/form", vehicleType);
+        return String.format("ads/%s/form", vehicleType);
     }
 }
