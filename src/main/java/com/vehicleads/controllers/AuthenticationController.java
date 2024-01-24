@@ -9,6 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.validation.Valid;
 
 @Controller
 public class AuthenticationController {
@@ -31,13 +34,16 @@ public class AuthenticationController {
 
 
     @PostMapping("/register")
-    public String register(UserRegistrationDto registrationDto) { //Valid
+    public String register(@Valid UserRegistrationDto registrationDto, RedirectAttributes redirectAttributes) {
         try {
             userService.register(registrationDto);
-        } catch (EmailAlreadyInUseException e) {
-            return e.getMessage();
-        }
 
-        return "redirect:/login";
+            return "redirect:/login";
+        }
+        catch (EmailAlreadyInUseException eaiue) {
+            redirectAttributes.addFlashAttribute("message", eaiue.getMessage());
+
+            return "redirect:/register";
+        }
     }
 }

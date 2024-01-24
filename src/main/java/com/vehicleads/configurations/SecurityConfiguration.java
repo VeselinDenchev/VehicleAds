@@ -27,49 +27,27 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(auth ->
-                auth.requestMatchers("/", "/ads/*", "/public/**", "/register", "/login", "/resources/**", "/static/**", "/css/**",
-                                     "/js/**", "/images/**", "/webjars/**", "https://cdn.jsdelivr.net/**").permitAll() // Public URLs
+                auth.requestMatchers("/", "/ads/*","/ads/*/*", "/register", "/login", "/error", "/resources/**", "/static/**",
+                                     "/css/**", "/js/**", "/img/**", "/webjars/**", "https://cdn.jsdelivr.net/**",
+                                     "https://code.jquery.com/**", "https://cdnjs.cloudflare.com/ajax/**",
+                                     "https://stackpath.bootstrapcdn.com/**",
+                                     "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/**",
+                                     "https://kit.fontawesome.com/**").permitAll() // Public URLs
                         .anyRequest().authenticated() // All other URLs are protected
         );
         http.formLogin(form ->
-                form.loginPage("/login")
-                    .defaultSuccessUrl("/")
-                    .permitAll() // Allow access to the login page
+                       form.loginPage("/login")
+                           .defaultSuccessUrl("/")
+                           .permitAll() // Allow access to the login page
         );
         http.logout(logout ->
-            logout.logoutUrl("/logout")
-                  .logoutSuccessUrl("/")
-                  .permitAll());
+                    logout.logoutUrl("/logout")
+                          .logoutSuccessUrl("/")
+                          .permitAll());
         http.sessionManagement(sessionManagement ->
             sessionManagement.sessionFixation().changeSessionId() // Protect against session fixation attacks
                              .maximumSessions(1) // Only one concurrent session per user
                               .expiredUrl("/login?expired")); // Redirect if session expires)
-//        http.httpBasic();
-
-//        http
-                // CSRF Protection
-//                .csrf().disable() // You can re-enable this as per your requirements
-
-                // Authorization rules
-
-
-                // Form Login Configuration
-
-
-//                .sessionManagement(session -> session
-//                        .sessionManagement()
-//                        .sessionFixation().changeSessionId() // Protect against session fixation attacks
-//                        .maximumSessions(1) // Only one concurrent session per user
-//                        .expiredUrl("/login?expired"); // Redirect if session expires
-//                );
-//
-//                // HTTP Basic Authentication
-//                .and()
-//                .httpBasic()
-//
-//                // Session Management
-//                .and()
-
 
         return http.build();
     }
@@ -77,6 +55,4 @@ public class SecurityConfiguration {
     public void configure(AuthenticationManagerBuilder builder) throws Exception {
         builder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
-
-
 }
