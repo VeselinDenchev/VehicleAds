@@ -3,6 +3,7 @@ package com.vehicleads.implementation.services.user;
 import com.vehicleads.abstraction.user.repository.UserRepository;
 import com.vehicleads.dtos.authentication.UserRegistrationDto;
 import com.vehicleads.exceptions.user.EmailAlreadyInUseException;
+import com.vehicleads.exceptions.user.PasswordNotMatchedException;
 import com.vehicleads.implementation.entities.user.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,7 +25,11 @@ public class UserService {
      * @param userDto Data Transfer Object (DTO) representing user registration data.
      */
     public void register(UserRegistrationDto userDto)
-        throws EmailAlreadyInUseException {
+        throws EmailAlreadyInUseException, PasswordNotMatchedException {
+        if (!userDto.getPassword().equals(userDto.getConfirmPassword())) {
+            throw new PasswordNotMatchedException();
+        }
+
         if (userRepository.existsByEmail(userDto.getEmail())) {
             throw new EmailAlreadyInUseException();
         }

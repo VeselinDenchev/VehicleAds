@@ -15,6 +15,10 @@ public class UserRegistrationDto {
     private String password;
 
     @NotEmpty
+    @Size(min = 8, max = 50)
+    private String confirmPassword;
+
+    @NotEmpty
     @Size(min = 2, max = 20)
     private String firstName;
 
@@ -46,6 +50,14 @@ public class UserRegistrationDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     public String getFirstName() {

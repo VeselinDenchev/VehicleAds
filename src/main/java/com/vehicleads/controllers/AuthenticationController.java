@@ -3,6 +3,7 @@ package com.vehicleads.controllers;
 import com.vehicleads.dtos.authentication.UserLoginDto;
 import com.vehicleads.dtos.authentication.UserRegistrationDto;
 import com.vehicleads.exceptions.user.EmailAlreadyInUseException;
+import com.vehicleads.exceptions.user.PasswordNotMatchedException;
 import com.vehicleads.implementation.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,7 +42,11 @@ public class AuthenticationController {
             return "redirect:/login";
         }
         catch (EmailAlreadyInUseException eaiue) {
-            redirectAttributes.addFlashAttribute("message", eaiue.getMessage());
+            redirectAttributes.addFlashAttribute("emailMessage", eaiue.getMessage());
+
+            return "redirect:/register";
+        } catch (PasswordNotMatchedException pnme) {
+            redirectAttributes.addFlashAttribute("confirmPasswordMessage", pnme.getMessage());
 
             return "redirect:/register";
         }
