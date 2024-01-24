@@ -17,4 +17,11 @@ public interface BoatAdRepository extends AdRepository<BoatAd> {
            WHERE id = :ad_id
            """, nativeQuery = true)
     int findUserId(@Param("ad_id") int adId);
+
+    @Transactional(readOnly = true)
+    @Query(value = """
+           SELECT * FROM vehicle_ads.boat_ads
+           WHERE user_id = :user_id
+           """, nativeQuery = true)
+    List<BoatAd> findAllByUserId(@Param("user_id") int userId);
 }

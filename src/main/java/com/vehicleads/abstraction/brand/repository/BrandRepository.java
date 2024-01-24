@@ -28,7 +28,7 @@ public interface BrandRepository extends BaseRepository<Brand, Integer> {
 
     @Transactional(readOnly = true)
     @Query(value = """
-           SELECT DISTINCT br.id, b.name FROM vehicle_ads.brands AS b
+           SELECT DISTINCT b.id, b.name FROM vehicle_ads.brands AS b
            INNER JOIN vehicle_ads.cars AS c ON b.id = c.brand_id
            ORDER BY b.name
            """, nativeQuery = true)
@@ -36,7 +36,7 @@ public interface BrandRepository extends BaseRepository<Brand, Integer> {
 
     @Transactional(readOnly = true)
     @Query(value = """
-           SELECT DISTINCT br.id, b.name FROM vehicle_ads.brands AS b
+           SELECT DISTINCT b.id, b.name FROM vehicle_ads.brands AS b
            INNER JOIN vehicle_ads.caravans AS c ON b.id = c.brand_id
            ORDER BY b.name
            """, nativeQuery = true)
@@ -44,7 +44,7 @@ public interface BrandRepository extends BaseRepository<Brand, Integer> {
 
     @Transactional(readOnly = true)
     @Query(value = """
-           SELECT DISTINCT br.id, b.name FROM vehicle_ads.brands AS b
+           SELECT DISTINCT b.id, b.name FROM vehicle_ads.brands AS b
            INNER JOIN vehicle_ads.motorcycles AS m ON b.id = m.brand_id
            ORDER BY b.name
            """, nativeQuery = true)
@@ -52,7 +52,7 @@ public interface BrandRepository extends BaseRepository<Brand, Integer> {
 
     @Transactional(readOnly = true)
     @Query(value = """
-           SELECT DISTINCT br.id, b.name FROM vehicle_ads.brands AS b
+           SELECT DISTINCT b.id, b.name FROM vehicle_ads.brands AS b
            INNER JOIN vehicle_ads.trucks AS t ON b.id = t.brand_id
            ORDER BY b.name
            """, nativeQuery = true)
