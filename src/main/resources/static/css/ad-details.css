@@ -1,0 +1,35 @@
+.ad-heading {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.ad-image {
+    width: 50%;  /* Fixed width, e.g., 70% of the container's width */
+    height: auto; /* Height adjusts according to aspect ratio */
+    display: block;
+    margin: 20px auto;
+    object-fit: contain; /* Ensures the image is scaled correctly within the dimensions */
+}
+
+.ad-specs {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.ad-specs .spec-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.ad-specs .spec-label {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.price-highlight {
+    font-size: 1.5em;
+    color: black; /* Changed color to black */
+    font-weight: bold;
+    display: inline-block;
+}

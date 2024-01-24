@@ -1,0 +1,41 @@
+.card-img-top {
+    width: 100%; /* makes image responsive */
+    height: 15vw; /* fixed height for images */
+    object-fit: cover; /* ensures image covers the area without stretching */
+}
+.card {
+    height: 100%; /* makes sure all cards are the same height */
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease; /* smooth transition for scaling */
+}
+.card-title {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+.card-body {
+    flex-grow: 1; /* allows card body to expand and fill space */
+}
+.card:hover {
+    transform: scale(1.05); /* scales up the card on hover */
+    z-index: 1; /* ensures the card is above others when enlarged */
+}
+
+.no-ads-message {
+    text-align: center;
+    margin-top: 10%;
+    margin-bottom: 10%; /* increased bottom margin */
+    /* Additional styling to match the rest of your page */
+}
+
+a.non-highlighted-link {
+    color: inherit;
+    text-decoration: none; /* Removes underline */
+    border: none; /* Removes any borders */
+}
+
+a.non-highlighted-link:hover {
+    color: inherit;
+    text-decoration: none; /* Removes underline */
+    border: none; /* Removes any borders */
+}

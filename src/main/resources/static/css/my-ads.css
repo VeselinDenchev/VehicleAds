@@ -1,0 +1,32 @@
+.link-icon:hover, .link-icon:focus, .link-icon:active, .link-icon:visited, .link-icon:link {
+    text-decoration: none;
+}
+
+#details-icon {
+    color: #17a2b8; /* Some color for the details icon */
+    transition: color 0.3s; /* Smooth transition for color change */
+}
+
+#details-icon:hover {
+    color: #138496; /* Darker shade on hover */
+}
+
+#edit-icon {
+    color: #007bff; /* Blue color for the edit icon */
+    transition: color 0.3s; /* Smooth transition for color change */
+}
+
+#edit-icon:hover {
+    color: #0056b3; /* Darker shade of blue on hover */
+    text-decoration: none; /* Removes underline on hover */
+    border: none; /* Removes border on hover */
+}
+
+#delete-icon {
+    color: #dc3545; /* Red color for the delete icon */
+    transition: color 0.3s; /* Smooth transition for color change */
+}
+
+#delete-icon:hover {
+    color: #a71d2a; /* Darker shade of red on hover */
+}

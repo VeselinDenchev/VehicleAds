@@ -1,0 +1,12 @@
+/* Custom styles */
+.form-container {
+    margin-top: 40px; /* Increased top margin */
+    margin-bottom: 40px; /* Increased bottom margin */
+}
+.form-buttons {
+    margin-top: 20px;
+    margin-bottom: 50px; /* Increased bottom margin for buttons */
+}
+.col-form-label {
+    font-weight: bold; /* Makes label text bolder */
+}

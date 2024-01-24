@@ -1,0 +1,58 @@
+<div id="ad-search-container" class="container"  th:fragment="ad-search(actionUrl)">
+    <!-- Heading and other content -->
+
+    <form
+            id="ad-search-form"
+            th:action="${actionUrl}"
+            method="GET"
+            th:object="${adSearch}"
+            class="my-2 my-lg-0"
+            onsubmit="validateAndSubmit()"
+    >
+        <div id="search-group">
+            <input class="form-control" type="search" placeholder="Search" aria-label="Search" th:field="*{title}" />
+            <button class="btn btn-outline-success" type="submit">
+                <i class="fas fa-search"></i> <!-- Magnifier icon -->
+            </button>
+        </div>
+
+        <div class="options-group">
+            <!-- Checkbox for isPriceNegotiable -->
+            <label class="checkbox-inline">
+                <input
+                        id="is-price-negotiable-checkbox"
+                        type="checkbox"
+                        th:field="*{isPriceNegotiable}"
+                        th:checked="*{isPriceNegotiable}"
+                        onclick="togglePriceRange()"
+                >Is Price Negotiable
+            </label>
+
+            <!-- Input for minPrice -->
+            <div class="price-input-group">
+                <label for="min-price-input">Min Price:</label>
+                <input
+                        id="min-price-input"
+                        type="number"
+                        class="form-control"
+                        placeholder="Min Price"
+                        th:field="*{minPrice}"
+                />
+            </div>
+
+            <!-- Input for maxPrice -->
+            <div class="price-input-group">
+                <label for="max-price-input">Max Price:</label>
+                <input
+                        id="max-price-input"
+                        type="number"
+                        class="form-control"
+                        placeholder="Max Price"
+                        th:field="*{maxPrice}"
+                />
+            </div>
+        </div>
+    </form>
+
+    <!-- Content below the form -->
+</div>

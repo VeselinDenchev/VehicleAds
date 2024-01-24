@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>VehicleAds</title>
+        <link
+                rel="stylesheet"
+                href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+                integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+                crossorigin="anonymous"
+        >
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+        <link href="/css/base.css" rel="stylesheet" />
+    </head>
+    <body>
+        <header th:replace="fragments/base :: header"></header>
+        <div th:replace="fragments/base :: main(~{::div#main-content})">
+            <div id="main-content" class="container mt-5" >
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h2 class="text-center mb-4">Welcome to Vehicle Ads, Your Trusted Partner in the Automotive Journey!</h2>
+                        <!-- Logo Image Below the H2 Tag -->
+                        <div class="text-center mb-4">
+                            <img src="/img/logo.png" style="max-width: 30%; height: auto;" alt="VehicleAds Logo">
+                        </div>
+
+                        <p>At Vehicle Ads, we understand that buying or selling a vehicle is more than just a transaction—it's a personal experience. That's why we've dedicated ourselves to creating a platform that not only simplifies this process but also makes it more enjoyable and trustworthy for everyone involved.</p>
+
+                        <h3>Our Mission:</h3>
+                        <p>To revolutionize the vehicle buying and selling experience by offering a user-friendly, secure, and efficient online platform. We aim to connect car enthusiasts, families, and professionals with the perfect vehicle that meets their needs, preferences, and budget.</p>
+
+                        <h3>Our Story:</h3>
+                        <p>Founded in 2024 by a team of automotive industry veterans and tech innovators, Vehicle Ads emerged from a shared passion for vehicles and a vision to improve the automotive marketplace. We recognized the need for a more streamlined, transparent, and user-centric approach to buying and selling vehicles online.</p>
+
+                        <h3>What We Offer:</h3>
+                        <ul>
+                            <li><strong>A Wide Range of Listings:</strong> From family vehicles to luxury vehicles, our extensive collection ensures that you’ll find the perfect vehicle that fits your style and budget.</li>
+                            <li><strong>User-Friendly Experience:</strong> Our intuitive website makes it easy for you to search, compare, and find your dream vehicle without any hassle.</li>
+                            <li><strong>Trust and Transparency:</strong> We believe in honesty and clarity. Our detailed vehicle listings provide comprehensive information, including history reports, to ensure you make informed decisions.</li>
+                            <li><strong>Community and Support:</strong> Our dedicated team offers personalized support, and our platform encourages a community of vehicle lovers to share their insights and experiences.</li>
+                        </ul>
+
+                        <h3>Our Commitment:</h3>
+                        <p>Your satisfaction is our priority. Whether you're a buyer, a seller, or just a visitor, we strive to provide you with the best possible experience. We continuously improve our platform based on your feedback, ensuring that Vehicle Ads remains at the forefront of the automotive marketplace.</p>
+
+                        <h3>Join Us on the Road Ahead:</h3>
+                        <p>Explore our site, discover your next vehicle, and experience the difference with Vehicle Ads. For any inquiries or assistance, our team is always here to help.</p>
+
+                        <p>Welcome to the future of vehicle buying and selling!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer th:replace="fragments/base :: footer"></footer>
+    </body>
+</html>

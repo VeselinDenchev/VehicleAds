@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Caravan Ads</title>
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+            crossorigin="anonymous"
+    >
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link href="/css/base.css" rel="stylesheet" />
+    <link href="/css/ad-search.css" rel="stylesheet" />
+    <link href="/css/my-ads.css" rel="stylesheet" />
+    <!-- Favicon -->
+    <link rel="icon" href="/img/logo.png" type="image/png" />>
+</head>
+    <body>
+        <header th:replace="fragments/base :: header"></header>
+        <div th:replace="fragments/base :: main(~{::div#main-content})">
+            <div id="main-content" class="container-fluid text-center">
+                <h1 id="page-heading">My Caravan Ads</h1>
+                <div class="row justify-content-center">
+                    <header th:replace="fragments/ad-search :: ad-search('/ads/caravan/my')"></header>
+                    <div class="container mt-4"> <!-- Adjust the column size as needed -->
+                        <!-- Create Ad Button with Icon -->
+                        <h2 th:if="${#lists.isEmpty(ads)}" class="no-ads-message">
+                            No ads found
+                        </h2>
+                        <span th:if="${#lists.isEmpty(ads)}">
+                            <a th:href="@{'/ads/caravan/create'}">Would you like to create new ad? Let's get started.</a>
+                        </span>
+                        <!-- Button with Plus Icon -->
+                        <div th:unless="${#lists.isEmpty(ads)}" class="d-flex justify-content-end mb-2">
+                            <a th:href="@{'/ads/caravan/create'}" class="btn btn-success">
+                                <i class="fas fa-plus"></i>
+                            </a>
+                        </div>
+                        <table th:unless="${#lists.isEmpty(ads)}" class="table table-bordered">
+                            <thead class="thead-dark">
+                            <th>Title</th>
+                            <th>Image</th>
+                            <th>Price</th>
+                            <th>Condition</th>
+                            <th>Color</th>
+                            <th>Length</th>
+                            <th>Manufacture Year</th>
+                            <th>Action</th>
+                            </thead>
+                            <tbody>
+                            <th:block th:each="ad : ${ads}">
+                                <tr>
+                                    <td th:text="${ad.title}"></td>
+                                    <td><img th:src="${ad.imageUrl}" th:attr="alt=${ad.title} + ' image'" style="width: 3em; height: 2em" /></td>
+                                    <td th:if="${ad.isPriceNegotiable}">Negotiable</td>
+                                    <td th:unless="${ad.isPriceNegotiable}">[[${ad.price}]]</td>
+                                    <th:block th:switch="${ad.vehicleCondition}">
+                                        <td th:case="${T(com.vehicleads.abstraction.ads.ad.VehicleCondition).FOR_PARTS}">For parts</td>
+                                        <td th:case="${T(com.vehicleads.abstraction.ads.ad.VehicleCondition).USED}">Used</td>
+                                        <td th:case="${T(com.vehicleads.abstraction.ads.ad.VehicleCondition).NEW}">New</td>
+                                        <td th:case="*"></td>
+                                    </th:block>
+                                    <td th:text="${ad.color}"></td>
+                                    <td th:text="${ad.lengthInMeters + ' m'}"></td>
+                                    <td th:text="${ad.manufactureYear}"></td>
+                                    <td>
+                                        <a class="h4 mr-3 link-icon" th:href="@{'/ads/caravan/' + ${ad.id}}">
+                                            <i id="details-icon" class="fas fa-info-circle"></i> <!-- Info icon for Details -->
+                                        </a>
+                                        <a class="h4 mr-3 link-icon" th:href="@{'/ads/caravan/edit/' + ${ad.id}}">
+                                            <i id="edit-icon" class="fas fa-pencil-alt"></i> <!-- Pencil icon for Edit -->
+                                        </a>
+                                        <a class="h4 link-icon" th:href="@{'/ads/caravan/delete/' + ${ad.id}}">
+                                            <i id="delete-icon" class="fas fa-trash-alt"></i> <!-- Trash bin icon for Delete -->
+                                        </a>
+                                    </td>
+                                </tr>
+                            </th:block>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer th:replace="fragments/base :: footer"></footer>
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <script type="text/javascript" th:src="@{/js/ad-price.js}"></script>
+        <script type="text/javascript" th:inline="javascript">
+            document.addEventListener('DOMContentLoaded', function () {
+                togglePriceRange();
+            });
+        </script>
+    </body>
+</html>
