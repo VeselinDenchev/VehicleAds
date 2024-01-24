@@ -18,7 +18,9 @@ import com.vehicleads.implementation.entities.brand.Brand;
 import com.vehicleads.implementation.services.ad.AdService;
 import com.vehicleads.implementation.services.brand.BrandService;
 import com.vehicleads.implementation.services.vehicle.VehicleService;
+import com.vehicleads.utils.error.RedirectToErrorPageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -39,53 +41,75 @@ public class AdController {
     private BrandService brandService;
 
     @GetMapping("/ads/{vehicleType}")
-    public String findByVehicleTypeAndTitle(@PathVariable("vehicleType") String vehicleType,
-                                            AdSearchDto adSearch,
-                                            Model model) {
+    public String findMany(@PathVariable("vehicleType") String vehicleType,
+                           AdSearchDto adSearch,
+                           Model model,
+                           RedirectAttributes redirectAttributes) {
         try {
-            List<? extends Ad> ads = adService.find(vehicleType, adSearch);
+            List<? extends Ad> ads = adService.findMany(vehicleType, adSearch);
             model.addAttribute("ads", ads);
             model.addAttribute("adSearch", adSearch);
 
-            return String.format("%s-ad/list", vehicleType);
+            return String.format("ads/%s-ad/list", vehicleType);
         }
         catch (InvalidVehicleTypeException ivte) {
-            return ivte.getMessage();
+            return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.BAD_REQUEST, ivte.getMessage());
+        }
+    }
+
+    @GetMapping("/ads/{vehicleType}/my")
+    public String findManyUserAds(@PathVariable("vehicleType") String vehicleType,
+                                  AdSearchDto adSearch,
+                                  Model model,
+                                  RedirectAttributes redirectAttributes) {
+        try {
+            List<? extends Ad> ads = adService.findManyUserAds(vehicleType, adSearch);
+            model.addAttribute("ads", ads);
+            model.addAttribute("adSearch", adSearch);
+
+            return String.format("ads/%s-ad/my-ads", vehicleType);
+        }
+        catch (InvalidVehicleTypeException ivte) {
+            return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.BAD_REQUEST, ivte.getMessage());
         }
     }
 
     @GetMapping("/ads/{vehicleType}/{id}")
-    public String find(@PathVariable("vehicleType") String vehicleType, @PathVariable("id") int id) {
+    public String find(@PathVariable("vehicleType") String vehicleType,
+                       @PathVariable("id") int id,
+                       Model model,
+                       RedirectAttributes redirectAttributes) {
         try {
             Ad ad = adService.findByVehicleTypeAndId(vehicleType, id);
+            model.addAttribute("ad", ad);
 
-            return "index";
+            return String.format("ads/%s-ad/details", vehicleType);
         }
         catch (InvalidVehicleTypeException ivte) {
-            return ivte.getMessage();
+            return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.BAD_REQUEST, ivte.getMessage());
         }
         catch (AdNotFoundException vanfe) {
-            return vanfe.getMessage();
+            return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.NOT_FOUND, vanfe.getMessage());
         }
     }
 
     @GetMapping("/ads/{vehicleType}/create")
-    public String create(@PathVariable("vehicleType") String vehicleType, Model model) {
+    public String create(@PathVariable("vehicleType") String vehicleType,
+                         Model model,
+                         RedirectAttributes redirectAttributes) {
         try {
             Ad ad = vehicleService.getAdInstanceByVehicleType(vehicleType);
             List<Brand> brands = brandService.findAllBrandsByVehicleType(vehicleType);
             List<? extends Vehicle> models = vehicleService.getBrandModelsByVehicleType(vehicleType);
 
-            model.addAttribute("ad", ad);
-            model.addAttribute("brands", brands);
-            model.addAttribute("models", models);
-        } catch (InvalidVehicleTypeException ivte) {
-            return ivte.getMessage();
-        } catch (BrandNotFoundException e) {
-            throw new RuntimeException(e);
+            return buildForm("Create", vehicleType, ad, brands, models, model);
         }
-
-        return String.format("%s-ad/create", vehicleType);
+        catch (InvalidVehicleTypeException ivte) {
+            return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.BAD_REQUEST, ivte.getMessage());
+        }
+        catch (BrandNotFoundException bnfe) {
+            return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.NOT_FOUND, bnfe.getMessage());
+        }
     }
 
     @GetMapping("/ads/{vehicleType}/edit/{id}")
@@ -98,97 +122,103 @@ public class AdController {
             List<Brand> brands = brandService.findAllBrandsByVehicleType(vehicleType);
             List<? extends Vehicle> models = vehicleService.getBrandModelsByVehicleType(vehicleType);
 
-            model.addAttribute("ad", ad);
-            model.addAttribute("brands", brands);
-            model.addAttribute("models", models);
-
-            return String.format("%s-ad/edit", vehicleType);
+            return buildForm("Update", vehicleType, ad, brands, models, model);
         }
         catch (InvalidVehicleTypeException ivte) {
-            return ivte.getMessage();
+            return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.BAD_REQUEST, ivte.getMessage());
         }
-        catch (AdNotFoundException vadnfe) {
-            return vadnfe.getMessage();
-        } catch (BrandNotFoundException e) {
-            throw new RuntimeException(e);
+        catch (AdNotFoundException | BrandNotFoundException nfe) {
+            return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.NOT_FOUND, nfe.getMessage());
         }
     }
 
     @PostMapping("/ads/boat/save")
-    public String save(@Valid BoatAd boatAd) {
+    public String save(@Valid BoatAd boatAd, RedirectAttributes redirectAttributes) {
         try {
             adService.save(boatAd);
 
-            return "redirect:/ads/boat";
-        } catch (InvalidVehicleAdTypeException e) {
-            throw new RuntimeException(e);
-        } catch (UnauthorizedException e) {
-            throw new RuntimeException(e);
+            return "redirect:/ads/boat/my";
+        }
+        catch (InvalidVehicleAdTypeException ivate) {
+            return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.BAD_REQUEST, ivate.getMessage());
+        }
+        catch (UnauthorizedException ue) {
+            return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.UNAUTHORIZED, ue.getMessage());
         }
     }
 
     @PostMapping("/ads/bus/save")
-    public String save(@Valid BusAd busAd) {
+    public String save(@Valid BusAd busAd, RedirectAttributes redirectAttributes) {
         try {
             adService.save(busAd);
 
-            return "boat/ads-list";
-        } catch (InvalidVehicleAdTypeException e) {
-            throw new RuntimeException(e);
-        } catch (UnauthorizedException e) {
-            throw new RuntimeException(e);
+            return "redirect:/ads/bus/my";
+        }
+        catch (InvalidVehicleAdTypeException ivate) {
+            return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.BAD_REQUEST, ivate.getMessage());
+        }
+        catch (UnauthorizedException ue) {
+            return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.UNAUTHORIZED, ue.getMessage());
         }
     }
 
     @PostMapping("/ads/car/save")
-    public String save(@Valid CarAd carAd) {
+    public String save(@Valid CarAd carAd, RedirectAttributes redirectAttributes) {
         try {
             adService.save(carAd);
 
-            return "boat/ads-list";
-        } catch (InvalidVehicleAdTypeException e) {
-            throw new RuntimeException(e);
-        } catch (UnauthorizedException e) {
-            throw new RuntimeException(e);
+            return "redirect:/ads/car/my";
+        }
+        catch (InvalidVehicleAdTypeException ivate) {
+            return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.BAD_REQUEST, ivate.getMessage());
+        }
+        catch (UnauthorizedException ue) {
+            return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.UNAUTHORIZED, ue.getMessage());
         }
     }
 
     @PostMapping("/ads/caravan/save")
-    public String save(@Valid CaravanAd caravanAd) {
+    public String save(@Valid CaravanAd caravanAd, RedirectAttributes redirectAttributes) {
         try {
             adService.save(caravanAd);
 
-            return "boat/ads-list";
-        } catch (InvalidVehicleAdTypeException e) {
-            throw new RuntimeException(e);
-        } catch (UnauthorizedException e) {
-            throw new RuntimeException(e);
+            return "redirect:/ads/caravan/my";
+        }
+        catch (InvalidVehicleAdTypeException ivate) {
+            return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.BAD_REQUEST, ivate.getMessage());
+        }
+        catch (UnauthorizedException ue) {
+            return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.UNAUTHORIZED, ue.getMessage());
         }
     }
 
     @PostMapping("/ads/motorcycle/save")
-    public String save(@Valid MotorcycleAd motorcycleAd) {
+    public String save(@Valid MotorcycleAd motorcycleAd, RedirectAttributes redirectAttributes) {
         try {
             adService.save(motorcycleAd);
 
-            return "boat/ads-list";
-        } catch (InvalidVehicleAdTypeException e) {
-            throw new RuntimeException(e);
-        } catch (UnauthorizedException e) {
-            throw new RuntimeException(e);
+            return "redirect:/ads/motorcycle/my";
+        }
+        catch (InvalidVehicleAdTypeException ivate) {
+            return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.BAD_REQUEST, ivate.getMessage());
+        }
+        catch (UnauthorizedException ue) {
+            return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.UNAUTHORIZED, ue.getMessage());
         }
     }
 
     @PostMapping("/ads/truck/save")
-    public String save(@Valid TruckAd truckAd) {
+    public String save(@Valid TruckAd truckAd, RedirectAttributes redirectAttributes) {
         try {
             adService.save(truckAd);
 
-            return "boat/ads-list";
-        } catch (InvalidVehicleAdTypeException e) {
-            throw new RuntimeException(e);
-        } catch (UnauthorizedException e) {
-            throw new RuntimeException(e);
+            return "redirect:/ads/truck/my";
+        }
+        catch (InvalidVehicleAdTypeException ivate) {
+            return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.BAD_REQUEST, ivate.getMessage());
+        }
+        catch (UnauthorizedException ue) {
+            return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.UNAUTHORIZED, ue.getMessage());
         }
     }
 
@@ -201,10 +231,24 @@ public class AdController {
 
             return String.format("redirect:/ads/%s", vehicleType);
         } catch (InvalidVehicleTypeException ivte) {
-            return ivte.getMessage();
+            return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.BAD_REQUEST, ivte.getMessage());
         }
-        catch (AdNotFoundException vanfe) {
-            return vanfe.getMessage();
+        catch (AdNotFoundException anfe) {
+            return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.NOT_FOUND, anfe.getMessage());
         }
+    }
+
+    private String buildForm(String action,
+                             String vehicleType,
+                             Ad ad,
+                             List<Brand> brands,
+                             List<? extends Vehicle> models,
+                             Model model) {
+        model.addAttribute("pageTitle", String.format("%s Ad", action));
+        model.addAttribute("ad", ad);
+        model.addAttribute("brands", brands);
+        model.addAttribute("models", models);
+
+        return String.format("ads/%s-ad/form", vehicleType);
     }
 }
