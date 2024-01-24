@@ -33,7 +33,7 @@
                     <div class="card-body">
                       <h5 class="card-title" th:text="${ad.title}"></h5>
                       <p class="card-text">
-                        <strong>Car:</strong> <span th:text="${ad.car?.brand?.name} + ' ' + ${ad.car?.modelName}"></span><br>
+                        <strong>Car:</strong> <span th:text="${ad.vehicle?.brand?.name} + ' ' + ${ad.vehicle?.modelName}"></span><br>
                         <strong>Year:</strong> <span th:text="${ad.manufactureYear}"></span><br>
                         <strong>Engine type:</strong>
                         <th:block th:switch="${ad.engineType}">

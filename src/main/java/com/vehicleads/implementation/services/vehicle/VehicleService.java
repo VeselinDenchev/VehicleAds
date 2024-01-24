@@ -1,10 +1,9 @@
 package com.vehicleads.implementation.services.vehicle;
 
 import com.vehicleads.abstraction.ads.ad.Ad;
-import com.vehicleads.abstraction.base.repositories.VehicleRepository;
-import com.vehicleads.abstraction.vehicle.Vehicle;
-import com.vehicleads.abstraction.vehicle.repositories.*;
-import com.vehicleads.exceptions.brand.BrandNotFoundException;
+import com.vehicleads.abstraction.vehicle.repository.VehicleRepository;
+import com.vehicleads.implementation.entities.vehicle.Vehicle;
+import com.vehicleads.implementation.entities.vehicle.VehicleType;
 import com.vehicleads.exceptions.vehicle.InvalidVehicleTypeException;
 import com.vehicleads.implementation.entities.ads.boat.BoatAd;
 import com.vehicleads.implementation.entities.ads.bus.BusAd;
@@ -16,58 +15,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class VehicleService {
     @Autowired
-    private BoatRepository boatRepository;
+    private VehicleRepository vehicleRepository;
 
-    @Autowired
-    private BusRepository busRepository;
+    public Ad getAdInstanceByVehicleType(String vehicleTypeString) throws InvalidVehicleTypeException {
+        try {
+            VehicleType vehicleType = VehicleType.valueOfIgnoreCase(vehicleTypeString.toLowerCase());
 
-    @Autowired
-    private CarRepository carRepository;
-
-    @Autowired
-    private CaravanRepository caravanRepository;
-
-    @Autowired
-    private MotorcycleRepository motorcycleRepository;
-
-    @Autowired
-    private TruckRepository truckRepository;
-
-    public Ad getAdInstanceByVehicleType(String vehicleType) throws InvalidVehicleTypeException {
-        return switch (vehicleType) {
-            case "boat" -> new BoatAd();
-            case "bus" -> new BusAd();
-            case "car" -> new CarAd();
-            case "caravan" -> new CaravanAd();
-            case "motorcycle" -> new MotorcycleAd();
-            case "truck" -> new TruckAd();
-            case null, default -> throw new InvalidVehicleTypeException();
-        };
+            return switch (vehicleType) {
+                case Boat -> new BoatAd();
+                case Bus -> new BusAd();
+                case Car -> new CarAd();
+                case Caravan -> new CaravanAd();
+                case Motorcycle -> new MotorcycleAd();
+                case Truck -> new TruckAd();
+            };
+        }
+        catch (IllegalArgumentException iae) {
+            throw new InvalidVehicleTypeException();
+        }
     }
 
-    public List<? extends Vehicle> getBrandModelsByVehicleType(String vehicleType)
-        throws BrandNotFoundException,
-               InvalidVehicleTypeException {
-        var repository = getRepositoryByVehicleType(vehicleType).orElseThrow(InvalidVehicleTypeException::new);
-        List<? extends Vehicle> models = repository.findModels();
+    public List<Vehicle> getBrandModelsByVehicleType(String vehicleTypeString)
+        throws InvalidVehicleTypeException {
+        try {
+            VehicleType vehicleType = VehicleType.valueOfIgnoreCase(vehicleTypeString.toLowerCase());
+            List<Vehicle> models = vehicleRepository.findModels(vehicleType);
 
-        return models;
-    }
-
-    private Optional<VehicleRepository<? extends Vehicle>> getRepositoryByVehicleType(String vehicleTypeName) {
-        return switch (vehicleTypeName.toLowerCase()) {
-            case "boat" -> Optional.of(boatRepository);
-            case "bus" -> Optional.of(busRepository);
-            case "car" -> Optional.of(carRepository);
-            case "caravan" -> Optional.of(caravanRepository);
-            case "motorcycle" -> Optional.of(motorcycleRepository);
-            case "truck" -> Optional.of(truckRepository);
-            default -> Optional.empty();
-        };
+            return models;
+        }
+        catch (IllegalArgumentException iae) {
+            throw new InvalidVehicleTypeException();
+        }
     }
 }

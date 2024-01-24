@@ -3,8 +3,10 @@ package com.vehicleads.implementation.services.ad;
 import com.vehicleads.abstraction.ads.repositories.*;
 import com.vehicleads.abstraction.ads.ad.Ad;
 import com.vehicleads.abstraction.base.repositories.AdRepository;
+import com.vehicleads.abstraction.vehicle.repository.VehicleRepository;
 import com.vehicleads.abstraction.user.repository.UserRepository;
-import com.vehicleads.abstraction.vehicle.repositories.*;
+import com.vehicleads.implementation.entities.vehicle.Vehicle;
+import com.vehicleads.implementation.entities.vehicle.VehicleType;
 import com.vehicleads.dtos.ad.AdSearchDto;
 import com.vehicleads.exceptions.ad.AdNotFoundException;
 import com.vehicleads.exceptions.user.UnauthorizedException;
@@ -18,14 +20,12 @@ import com.vehicleads.implementation.entities.ads.truck.TruckAd;
 import com.vehicleads.exceptions.ad.InvalidVehicleAdTypeException;
 import com.vehicleads.exceptions.vehicle.InvalidVehicleTypeException;
 import com.vehicleads.implementation.entities.user.UserEntity;
-import com.vehicleads.implementation.entities.vehicles.*;
 import com.vehicleads.utils.authentication.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,70 +34,74 @@ public class AdService {
     private BoatAdRepository boatAdRepository;
 
     @Autowired
-    private BoatRepository boatRepository;
-
-    @Autowired
     private BusAdRepository busAdRepository;
-
-    @Autowired
-    private BusRepository busRepository;
 
     @Autowired
     private CarAdRepository carAdRepository;
 
     @Autowired
-    private CarRepository carRepository;
-
-    @Autowired
     private CaravanAdRepository caravanAdRepository;
-
-    @Autowired
-    private CaravanRepository caravanRepository;
 
     @Autowired
     private MotorcycleAdRepository motorcycleAdRepository;
 
     @Autowired
-    private MotorcycleRepository motorcycleRepository;
-
-    @Autowired
     private TruckAdRepository truckAdRepository;
 
     @Autowired
-    private TruckRepository truckRepository;
+    private VehicleRepository vehicleRepository;
 
     @Autowired
     private UserRepository userRepository;
 
-    public List<? extends Ad> findMany(String vehicleType, AdSearchDto adSearch)
+    public List<? extends Ad> findMany(String vehicleTypeString, AdSearchDto adSearch)
         throws InvalidVehicleTypeException {
-        var repository = getRepositoryByVehicleType(vehicleType).orElseThrow(InvalidVehicleTypeException::new);
+        try {
+            VehicleType vehicleType = VehicleType.valueOfIgnoreCase(vehicleTypeString.toLowerCase());
+            var repository = getRepositoryByVehicleType(vehicleType);
 
-        List<? extends Ad> ads = repository.findAll();
-        ads = filterAds(ads, adSearch);
+            List<? extends Ad> ads = repository.findAll();
+            ads = filterAds(ads, adSearch);
 
-        return ads;
+            return ads;
+        }
+        catch (IllegalArgumentException iae) {
+            throw new InvalidVehicleTypeException();
+        }
     }
 
-    public List<? extends Ad> findManyUserAds(String vehicleType, AdSearchDto adSearch)
+    public List<? extends Ad> findManyUserAds(String vehicleTypeString, AdSearchDto adSearch)
             throws InvalidVehicleTypeException {
-        String username = SessionUtil.getSessionUser();
-        UserEntity user = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
+        try {
+            VehicleType vehicleType = VehicleType.valueOfIgnoreCase(vehicleTypeString.toLowerCase());
+            String username = SessionUtil.getSessionUser();
+            UserEntity user = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
 
-        var repository = getRepositoryByVehicleType(vehicleType).orElseThrow(InvalidVehicleTypeException::new);
+            var repository = getRepositoryByVehicleType(vehicleType);
 
-        List<? extends Ad> ads = repository.findAllByUserId(user.getId());
-        ads = filterAds(ads, adSearch);
+            List<? extends Ad> ads = repository.findAllByUserId(user.getId());
+            ads = filterAds(ads, adSearch);
 
-        return ads;
+            return ads;
+        }
+        catch (IllegalArgumentException iae) {
+            throw new InvalidVehicleTypeException();
+        }
     }
 
-    public Ad findByVehicleTypeAndId(String vehicleType, int id)
+    public Ad findByVehicleTypeAndId(String vehicleTypeString, int id)
         throws InvalidVehicleTypeException, AdNotFoundException {
-        var repository = getRepositoryByVehicleType(vehicleType).orElseThrow(InvalidVehicleTypeException::new);
-        Ad ad = repository.findById(id).orElseThrow(AdNotFoundException::new);
+        try {
+            VehicleType vehicleType = VehicleType.valueOfIgnoreCase(vehicleTypeString.toLowerCase());
 
-        return ad;
+            var repository = getRepositoryByVehicleType(vehicleType);
+            Ad ad = repository.findById(id).orElseThrow(AdNotFoundException::new);
+
+            return ad;
+        }
+        catch (IllegalArgumentException iae) {
+            throw new InvalidVehicleTypeException();
+        }
     }
 
     public void save(Ad ad) throws UserNotFoundException, UnauthorizedException, InvalidVehicleAdTypeException {
@@ -110,35 +114,43 @@ public class AdService {
         }
 
         switch (ad) {
-            case BoatAd boatAd -> saveBoatAd(boatAd, user.getId());
-            case BusAd busAd -> saveBusAd(busAd, user.getId());
-            case CarAd carAd -> saveCarAd(carAd, user.getId());
-            case CaravanAd caravanAd -> saveCaravanAd(caravanAd, user.getId());
-            case MotorcycleAd motorcycleAd -> saveMotorcycleAd(motorcycleAd, user.getId());
-            case TruckAd truckAd -> saveTruckAd(truckAd, user.getId());
+            case BoatAd boatAd -> saveAd(boatAd, boatAdRepository, VehicleType.Boat, user.getId());
+            case BusAd busAd -> saveAd(busAd, busAdRepository, VehicleType.Bus, user.getId());
+            case CarAd carAd -> saveAd(carAd, carAdRepository, VehicleType.Car, user.getId());
+            case CaravanAd caravanAd -> saveAd(caravanAd, caravanAdRepository, VehicleType.Caravan, user.getId());
+            case MotorcycleAd motorcycleAd -> saveAd(motorcycleAd,
+                                                     motorcycleAdRepository,
+                                                     VehicleType.Motorcycle, user.getId());
+            case TruckAd truckAd -> saveAd(truckAd, truckAdRepository, VehicleType.Truck, user.getId());
             case null, default -> throw new InvalidVehicleAdTypeException();
         }
     }
 
-    public void deleteByVehicleTypeAndId(String vehicleType, int id)
+    public void deleteByVehicleTypeAndId(String vehicleTypeString, int id)
         throws AdNotFoundException, InvalidVehicleTypeException {
-        var repository = getRepositoryByVehicleType(vehicleType).orElseThrow(InvalidVehicleTypeException::new);
+        try {
+            VehicleType vehicleType = VehicleType.valueOfIgnoreCase(vehicleTypeString.toLowerCase());
 
-        boolean exists = repository.existsById(id);
-        if (!exists) throw new AdNotFoundException();
+            var repository = getRepositoryByVehicleType(vehicleType);
 
-        repository.deleteById(id);
+            boolean exists = repository.existsById(id);
+            if (!exists) throw new AdNotFoundException();
+
+            repository.deleteById(id);
+        }
+        catch (IllegalArgumentException iae) {
+            throw new InvalidVehicleTypeException();
+        }
     }
 
-    private Optional<AdRepository<? extends Ad>> getRepositoryByVehicleType(String vehicleType) {
-        return switch (vehicleType.toLowerCase()) {
-            case "boat" -> Optional.of(boatAdRepository);
-            case "bus" -> Optional.of(busAdRepository);
-            case "car" -> Optional.of(carAdRepository);
-            case "caravan" -> Optional.of(caravanAdRepository);
-            case "motorcycle" -> Optional.of(motorcycleAdRepository);
-            case "truck" -> Optional.of(truckAdRepository);
-            default -> Optional.empty();
+    private AdRepository<? extends Ad> getRepositoryByVehicleType(VehicleType vehicleType) {
+        return switch (vehicleType) {
+            case Boat -> boatAdRepository;
+            case Bus -> busAdRepository;
+            case Car -> carAdRepository;
+            case Caravan -> caravanAdRepository;
+            case Motorcycle -> motorcycleAdRepository;
+            case Truck -> truckAdRepository;
         };
     }
 
@@ -193,113 +205,24 @@ public class AdService {
                   .collect(Collectors.toList());
     }
 
+    private Vehicle mapVehicleBrandAndModel(Vehicle vehicle, VehicleType vehicleType) {
+        vehicle = vehicleRepository.findVehicleByBrandIdAndModel(vehicle.getBrand().getId(),
+                                                                 vehicle.getModelName(),
+                                                                 vehicleType);
 
-    private void saveBoatAd(BoatAd boatAd, int currentUserId) throws UnauthorizedException {
+        return vehicle;
+    }
+
+    private <T extends Ad> void saveAd(T ad, AdRepository<T> repository, VehicleType vehicleType, int currentUserId)
+        throws UnauthorizedException {
         // If ad is edited we must check if initially this ad was created by the same user
-        if (boatAd.getId() != null) {
-            int userIdOfLastUpdate = boatAdRepository.findUserId(boatAd.getId());
+        if (ad.getId() != null) {
+            int userIdOfLastUpdate = repository.findUserId(ad.getId());
             if (userIdOfLastUpdate != currentUserId) throw new UnauthorizedException();
         }
 
-        Boat boatFromDatabase = mapBoatBrandAndModel(boatAd.getBoat());
-        boatAd.setBoat(boatFromDatabase);
-        boatAdRepository.save(boatAd);
-    }
-
-    private Boat mapBoatBrandAndModel(Boat boat) {
-        boat = boatRepository.findBoatByBrandIdAndModel(boat.getBrand().getId(), boat.getModelName());
-
-        return boat;
-    }
-
-    private void saveBusAd(BusAd busAd, int currentUserId) throws UnauthorizedException {
-        // If ad is edited we must check if initially this ad was created by the same user
-        if (busAd.getId() != null) {
-            int userIdOfLastUpdate = boatAdRepository.findUserId(busAd.getId());
-            if (userIdOfLastUpdate != currentUserId) throw new UnauthorizedException();
-        }
-
-        Bus busFromDatabase = mapBusBrandAndModel(busAd.getBus());
-        busAd.setBus(busFromDatabase);
-        busAdRepository.save(busAd);
-    }
-
-    private Bus mapBusBrandAndModel(Bus bus) {
-        bus = busRepository.findBusByBrandIdAndModel(bus.getBrand().getId(), bus.getModelName());
-
-        return bus;
-    }
-
-    private void saveCarAd(CarAd carAd, int currentUserId) throws UnauthorizedException {
-        // If ad is edited we must check if initially this ad was created by the same user
-        if (carAd.getId() != null) {
-            int userIdOfLastUpdate = boatAdRepository.findUserId(carAd.getId());
-            if (userIdOfLastUpdate != currentUserId) throw new UnauthorizedException();
-        }
-
-        Car carFromDatabase = mapCarBrandAndModel(carAd.getCar());
-        carAd.setCar(carFromDatabase);
-        carAdRepository.save(carAd);
-    }
-
-    private Car mapCarBrandAndModel(Car car) {
-        car = carRepository.findCarByBrandIdAndModel(car.getBrand().getId(), car.getModelName());
-
-        return car;
-    }
-
-    private void saveCaravanAd(CaravanAd caravanAd, int currentUserId) throws UnauthorizedException {
-        // If ad is edited we must check if initially this ad was created by the same user
-        if (caravanAd.getId() != null) {
-            int userIdOfLastUpdate = boatAdRepository.findUserId(caravanAd.getId());
-            if (userIdOfLastUpdate != currentUserId) throw new UnauthorizedException();
-        }
-
-        Caravan caravanFromDatabase = mapCaravanBrandAndModel(caravanAd.getCaravan());
-        caravanAd.setCaravan(caravanFromDatabase);
-        caravanAdRepository.save(caravanAd);
-    }
-
-    private Caravan mapCaravanBrandAndModel(Caravan caravan) {
-        caravan = caravanRepository.findCaravanByBrandIdAndModel(caravan.getBrand().getId(), caravan.getModelName());
-
-        return caravan;
-    }
-
-    private void saveMotorcycleAd(MotorcycleAd motorcycleAd, int currentUserId) throws UnauthorizedException {
-        // If ad is edited we must check if initially this ad was created by the same user
-        if (motorcycleAd.getId() != null) {
-            int userIdOfLastUpdate = boatAdRepository.findUserId(motorcycleAd.getId());
-            if (userIdOfLastUpdate != currentUserId) throw new UnauthorizedException();
-        }
-
-        Motorcycle motorcycleFromDatabase = mapMotorcycleBrandAndModel(motorcycleAd.getMotorcycle());
-        motorcycleAd.setMotorcycle(motorcycleFromDatabase);
-        motorcycleAdRepository.save(motorcycleAd);
-    }
-
-    private Motorcycle mapMotorcycleBrandAndModel(Motorcycle motorcycle) {
-        motorcycle = motorcycleRepository.findMotorcycleByBrandIdAndModel(motorcycle.getBrand().getId(),
-                                                                          motorcycle.getModelName());
-
-        return motorcycle;
-    }
-
-    private void saveTruckAd(TruckAd truckAd, int currentUserId) throws UnauthorizedException {
-        // If ad is edited we must check if initially this ad was created by the same user
-        if (truckAd.getId() != null) {
-            int userIdOfLastUpdate = boatAdRepository.findUserId(truckAd.getId());
-            if (userIdOfLastUpdate != currentUserId) throw new UnauthorizedException();
-        }
-
-        Truck truckFromDatabase = mapTruckBrandAndModel(truckAd.getTruck());
-        truckAd.setTruck(truckFromDatabase);
-        truckAdRepository.save(truckAd);
-    }
-
-    private Truck mapTruckBrandAndModel(Truck truck) {
-        truck = truckRepository.findTruckByBrandIdAndModel(truck.getBrand().getId(), truck.getModelName());
-
-        return truck;
+        Vehicle vehicleFromDatabase = mapVehicleBrandAndModel(ad.getVehicle(), vehicleType);
+        ad.setVehicle(vehicleFromDatabase);
+        repository.save(ad);
     }
 }

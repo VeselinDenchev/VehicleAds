@@ -45,11 +45,11 @@
                             <div class="form-group row">
                                 <label for="brands-dropdown" class="col-sm-4 col-form-label">Brand</label>
                                 <div class="col-sm-8">
-                                    <select id="brands-dropdown" th:field="*{bus.brand.id}" class="form-control" onchange="loadBrandsModelsAndFilter()" required>
+                                    <select id="brands-dropdown" th:field="*{vehicle.brand.id}" class="form-control" onchange="loadBrandsModelsAndFilter()" required>
                                         <option th:each="brand : ${brands}"
                                                 th:value="${brand.id}"
                                                 th:text="${brand.name}"
-                                                th:selected="${brand.id} == *{bus.brand.id}"></option>
+                                                th:selected="${brand.id} == *{vehicle.brand.id}"></option>
                                     </select>
                                 </div>
                             </div>
@@ -58,8 +58,8 @@
                             <div class="form-group row">
                                 <label for="models-dropdown" class="col-sm-4 col-form-label">Model</label>
                                 <div class="col-sm-8">
-                                    <select id="models-dropdown" th:field="*{bus.modelName}" class="form-control" required>
-                                        <option th:value="*{bus.modelName}" selected>[[*{bus.modelName}]]</option>
+                                    <select id="models-dropdown" th:field="*{vehicle.modelName}" class="form-control" required>
+                                        <option th:value="*{vehicle.modelName}" selected>[[*{vehicle.modelName}]]</option>
                                     </select>
                                 </div>
                             </div>
@@ -205,7 +205,7 @@
                     }
                 });
                 // /*<![CDATA[*/
-                loadBrandsModelsAndFilter(/*[[${ad.bus?.brand?.id}]]*/, /*[[${ad.bus?.modelName}]]*/);
+                loadBrandsModelsAndFilter(/*[[${ad.vehicle?.brand?.id}]]*/, /*[[${ad.vehicle?.modelName}]]*/);
                 /*]]>*/
 
             });

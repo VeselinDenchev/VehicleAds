@@ -45,11 +45,11 @@
                             <div class="form-group row">
                                 <label for="brands-dropdown" class="col-sm-4 col-form-label">Brand</label>
                                 <div class="col-sm-8">
-                                    <select id="brands-dropdown" th:field="*{boat.brand.id}" class="form-control" onchange="loadBrandsModelsAndFilter()" required>
+                                    <select id="brands-dropdown" th:field="*{vehicle.brand.id}" class="form-control" onchange="loadBrandsModelsAndFilter()" required>
                                         <option th:each="brand : ${brands}"
                                                 th:value="${brand.id}"
                                                 th:text="${brand.name}"
-                                                th:selected="${brand.id} == *{boat.brand.id}"></option>
+                                                th:selected="${brand.id} == *{vehicle.brand.id}"></option>
                                     </select>
                                 </div>
                             </div>
@@ -58,8 +58,8 @@
                             <div class="form-group row">
                                 <label for="models-dropdown" class="col-sm-4 col-form-label">Model</label>
                                 <div class="col-sm-8">
-                                    <select id="models-dropdown" th:field="*{boat.modelName}" class="form-control" required>
-                                        <option th:value="*{boat.modelName}" selected>[[*{boat.modelName}]]</option>
+                                    <select id="models-dropdown" th:field="*{vehicle.modelName}" class="form-control" required>
+                                        <option th:value="*{vehicle.modelName}" selected>[[*{vehicle.modelName}]]</option>
                                     </select>
                                 </div>
                             </div>
@@ -141,7 +141,7 @@
                             <div class="form-group row">
                                 <label for="is-price-negotiable-checkbox" class="col-sm-4 col-form-label">Is price negotiable</label>
                                 <div class="col-sm-8">
-                                    <input id="is-price-negotiable-checkbox" type="checkbox" th:field="*{isPriceNegotiable}" required onchange="togglePrice()" />
+                                    <input id="is-price-negotiable-checkbox" type="checkbox" th:field="*{isPriceNegotiable}" onchange="togglePrice()" />
                                 </div>
                             </div>
 
@@ -179,7 +179,7 @@
                     }
                 });
                 // /*<![CDATA[*/
-                loadBrandsModelsAndFilter(/*[[${ad.boat?.brand?.id}]]*/, /*[[${ad.boat?.modelName}]]*/);
+                loadBrandsModelsAndFilter(/*[[${ad.vehicle?.brand?.id}]]*/, /*[[${ad.vehicle?.modelName}]]*/);
                 /*]]>*/
 
             });

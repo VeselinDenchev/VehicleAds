@@ -33,7 +33,7 @@
                     <div class="card-body">
                       <h5 class="card-title" th:text="${ad.title}"></h5>
                       <p class="card-text">
-                        <strong>Caravan:</strong> <span th:text="${ad.caravan?.brand?.name} + ' ' + ${ad.caravan?.modelName}"></span><br>
+                        <strong>Caravan:</strong> <span th:text="${ad.vehicle?.brand?.name} + ' ' + ${ad.vehicle?.modelName}"></span><br>
                         <strong>Year:</strong> <span th:text="${ad.manufactureYear}"></span><br>
                         <strong>Length:</strong> <span th:text="${ad.lengthInMeters} + ' m'"></span><br>
                         <strong>Color:</strong> <span th:text="${ad.color}"></span><br>

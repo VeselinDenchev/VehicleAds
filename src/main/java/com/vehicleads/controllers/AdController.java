@@ -1,11 +1,10 @@
 package com.vehicleads.controllers;
 
 import com.vehicleads.abstraction.ads.ad.Ad;
-import com.vehicleads.abstraction.vehicle.Vehicle;
+import com.vehicleads.implementation.entities.vehicle.Vehicle;
 import com.vehicleads.dtos.ad.AdSearchDto;
 import com.vehicleads.exceptions.ad.InvalidVehicleAdTypeException;
 import com.vehicleads.exceptions.ad.AdNotFoundException;
-import com.vehicleads.exceptions.brand.BrandNotFoundException;
 import com.vehicleads.exceptions.user.UnauthorizedException;
 import com.vehicleads.exceptions.vehicle.InvalidVehicleTypeException;
 import com.vehicleads.implementation.entities.ads.boat.BoatAd;
@@ -107,9 +106,6 @@ public class AdController {
         catch (InvalidVehicleTypeException ivte) {
             return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.BAD_REQUEST, ivte.getMessage());
         }
-        catch (BrandNotFoundException bnfe) {
-            return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.NOT_FOUND, bnfe.getMessage());
-        }
     }
 
     @GetMapping("/ads/{vehicleType}/edit/{id}")
@@ -127,8 +123,8 @@ public class AdController {
         catch (InvalidVehicleTypeException ivte) {
             return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.BAD_REQUEST, ivte.getMessage());
         }
-        catch (AdNotFoundException | BrandNotFoundException nfe) {
-            return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.NOT_FOUND, nfe.getMessage());
+        catch (AdNotFoundException anfe) {
+            return RedirectToErrorPageUtil.redirect(redirectAttributes, HttpStatus.NOT_FOUND, anfe.getMessage());
         }
     }
 

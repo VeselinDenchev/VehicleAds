@@ -2,6 +2,7 @@ package com.vehicleads.abstraction.ads.ad;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.vehicleads.abstraction.base.entity.BaseEntity;
+import com.vehicleads.implementation.entities.vehicle.Vehicle;
 import com.vehicleads.implementation.entities.user.UserEntity;
 import jakarta.persistence.*;
 import org.springframework.lang.Nullable;
@@ -13,6 +14,11 @@ import javax.validation.constraints.Size;
 
 @MappedSuperclass
 public class Ad extends BaseEntity<Integer> {
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "boat_id", nullable = false)
+    @JsonBackReference
+    private Vehicle vehicle;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonBackReference
@@ -52,6 +58,14 @@ public class Ad extends BaseEntity<Integer> {
     @Column(name = "description")
     @Size(max = 200)
     private String description;
+
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
 
     public String getTitle() {
         return title;
