@@ -1,103 +1,95 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">>
-<head>
-    <meta charset="UTF-8">
-    <title>Vehicle Ads</title>
-</head>
-<body>
-    <header th:fragment="header">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <!-- Updated logo instead of text -->
-            <a class="navbar-brand" href="/">
-                <img src="/img/logo.png" alt="VehicleAds Logo">
-            </a>
+<header th:fragment="header">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <!-- Updated logo instead of text -->
+        <a class="navbar-brand" href="/">
+            <img src="/img/logo.png" alt="VehicleAds Logo">
+        </a>
 
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="javascript:void(0)" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Boat
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" th:href="@{/ads/boat}">All ads</a>
-                            <a class="dropdown-item" th:href="@{/ads/boat/my}">My Ads</a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="javascript:void(0)" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Bus
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" th:href="@{/ads/bus}">All ads</a>
-                            <a class="dropdown-item" th:href="@{/ads/bus/my}">My Ads</a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="javascript:void(0)" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Car
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" th:href="@{/ads/car}">All ads</a>
-                            <a class="dropdown-item" th:href="@{/ads/car/my}">My Ads</a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="javascript:void(0)" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Caravan
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" th:href="@{/ads/caravan}">All ads</a>
-                            <a class="dropdown-item" th:href="@{/ads/caravan/my}">My Ads</a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="javascript:void(0)" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Motorcycle
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" th:href="@{/ads/motorcycle}">All ads</a>
-                            <a class="dropdown-item" th:href="@{/ads/motorcycle/my}">My Ads</a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="javascript:void(0)" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Truck
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" th:href="@{/ads/truck}">All ads</a>
-                            <a class="dropdown-item" th:href="@{/ads/truck/my}">My Ads</a>
-                        </div>
-                    </li>
-                    <!-- Repeat for other main links -->
-                </ul>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="javascript:void(0)" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Boat
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" th:href="@{/ads/boat}">All ads</a>
+                        <a class="dropdown-item" th:href="@{/ads/boat/my}">My Ads</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="javascript:void(0)" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Bus
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" th:href="@{/ads/bus}">All ads</a>
+                        <a class="dropdown-item" th:href="@{/ads/bus/my}">My Ads</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="javascript:void(0)" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Car
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" th:href="@{/ads/car}">All ads</a>
+                        <a class="dropdown-item" th:href="@{/ads/car/my}">My Ads</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="javascript:void(0)" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Caravan
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" th:href="@{/ads/caravan}">All ads</a>
+                        <a class="dropdown-item" th:href="@{/ads/caravan/my}">My Ads</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="javascript:void(0)" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Motorcycle
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" th:href="@{/ads/motorcycle}">All ads</a>
+                        <a class="dropdown-item" th:href="@{/ads/motorcycle/my}">My Ads</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="javascript:void(0)" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Truck
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" th:href="@{/ads/truck}">All ads</a>
+                        <a class="dropdown-item" th:href="@{/ads/truck/my}">My Ads</a>
+                    </div>
+                </li>
+                <!-- Repeat for other main links -->
+            </ul>
 
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item" sec:authorize="isAuthenticated()">
-                        <p class="nav-link"><span sec:authentication="name"></span></p>
-                    </li>
-                    <li class="nav-item" sec:authorize="isAuthenticated()">
-                        <a class="nav-link" th:href="@{/logout}">Logout</a>
-                    </li>
-                    <li class="nav-item" sec:authorize="!isAuthenticated()">
-                        <a class="nav-link" th:href="@{/login}">Login</a>
-                    </li>
-                    <li class="nav-item" sec:authorize="!isAuthenticated()">
-                        <a class="nav-link" th:href="@{/register}">Register</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </header>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <p class="nav-link"><span sec:authentication="name"></span></p>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/logout}">Logout</a>
+                </li>
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <a class="nav-link" th:href="@{/login}">Login</a>
+                </li>
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <a class="nav-link" th:href="@{/register}">Register</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
 
-
-    <!-- Main Content (ensure this contains enough content or min-height) -->
-    <main class="main-content" th:fragment="main(content)" th:replace="${content}">
-    </main>
+<!-- Main Content (ensure this contains enough content or min-height) -->
+<main class="main-content" th:fragment="main(content)" th:replace="${content}">
+</main>
 
     <!-- Footer -->
-    <footer class="footer" th:fragment="footer">
+<footer class="footer" th:fragment="footer">
         <div class="container">
-        <div class="row">
+            <div class="row">
             <div class="col-md-4">
                 <h5>Contact</h5>
                 <ul class="list-unstyled">
@@ -119,11 +111,5 @@
                 </div>
             </div>
         </div>
-    </div>
-</footer>
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-</body>
-</html>
+         </div>
+    </footer>
